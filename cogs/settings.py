@@ -12,6 +12,13 @@ class setting(commands.Cog):
     
     @commands.slash_command(name='set-channel', description='Установить канал для логов')
     async def set_channel(self, inter: disnake.AppCommandInter, channel: disnake.TextChannel):
+        if not channel.permissions_for(inter.guild.me).send_messages:
+            embed = disnake.Embed(
+                title='Ошибка',
+                description='У бота нет прав на отправку сообщений в этот канал.',
+                color=disnake.Color.red()
+            )
+            return await inter.response.send_message(embed=embed)
         async with aiosqlite.connect('main.db') as db:
             async with db.execute("SELECT role FROM channel_log WHERE server_id = ?", (inter.guild.id,)) as cursor:
                 row = await cursor.fetchone()
