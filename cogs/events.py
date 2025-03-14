@@ -34,8 +34,7 @@ class Events(commands.Cog):
             return
 
         mod_role = await self.get_role(member.guild)
-        if mod_role is None:
-            return
+
 
         embed = disnake.Embed(
             title='User joined',
@@ -47,7 +46,10 @@ class Events(commands.Cog):
             ),
             color=disnake.Color.green()
         )
-        await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        if mod_role:
+            await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        else:
+            await mod_channel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
@@ -56,8 +58,7 @@ class Events(commands.Cog):
             return
 
         mod_role = await self.get_role(member.guild)
-        if mod_role is None:
-            return
+
 
         joined = format_dt(member.joined_at, style='F') if member.joined_at else "Unknown"
         embed = disnake.Embed(
@@ -72,7 +73,10 @@ class Events(commands.Cog):
             ),
             color=disnake.Color.orange()
         )
-        await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        if mod_role:
+            await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        else:
+            await mod_channel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_member_ban(self, guild: disnake.Guild, user: disnake.User):
@@ -81,8 +85,7 @@ class Events(commands.Cog):
             return
 
         mod_role = await self.get_role(guild)
-        if mod_role is None:
-            return
+
 
         embed = disnake.Embed(
             title='User has banned',
@@ -94,7 +97,10 @@ class Events(commands.Cog):
             ),
             color=disnake.Color.dark_red()
         )
-        await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        if mod_role:
+            await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        else:
+            await mod_channel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_member_unban(self, guild: disnake.Guild, user: disnake.User):
@@ -103,8 +109,7 @@ class Events(commands.Cog):
             return
 
         mod_role = await self.get_role(guild)
-        if mod_role is None:
-            return
+
 
         embed = disnake.Embed(
             title='User has unbanned',
@@ -116,8 +121,10 @@ class Events(commands.Cog):
             ),
             color=disnake.Color.green()
         )
-        await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
-
+        if mod_role:
+            await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        else:
+            await mod_channel.send(embed=embed)
     @commands.Cog.listener()
     async def on_member_update(self, before: disnake.Member, after: disnake.Member):
         mod_channel = await self.get_channel(after.guild)
@@ -125,8 +132,7 @@ class Events(commands.Cog):
             return
 
         mod_role = await self.get_role(after.guild)
-        if mod_role is None:
-            return
+
 
         embed = disnake.Embed(
             title='Member updated',
@@ -140,7 +146,10 @@ class Events(commands.Cog):
             ),
             color=disnake.Color.blue()
         )
-        await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        if mod_role:
+            await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        else:
+            await mod_channel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_message_delete(self, message: disnake.Message):
@@ -154,8 +163,6 @@ class Events(commands.Cog):
             return
 
         mod_role = await self.get_role(message.guild)
-        if mod_role is None:
-            return
 
         embed = disnake.Embed(
             title='Message deleted',
@@ -171,7 +178,10 @@ class Events(commands.Cog):
         )
         embed.timestamp = disnake.utils.utcnow()
         embed.set_footer(text='Message deleted at')
-        await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        if mod_role:
+            await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        else:
+            await mod_channel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_message_edit(self, before: disnake.Message, after: disnake.Message):
@@ -183,8 +193,7 @@ class Events(commands.Cog):
             return
 
         mod_role = await self.get_role(after.guild)
-        if mod_role is None:
-            return
+
 
         embed = disnake.Embed(
             title='Message edited',
@@ -202,7 +211,10 @@ class Events(commands.Cog):
         )
         embed.timestamp = disnake.utils.utcnow()
         embed.set_footer(text='Message edited at')
-        await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        if mod_role:
+            await mod_channel.send(f'||{mod_role.mention}||', embed=embed)
+        else:
+            await mod_channel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild: disnake.Guild):

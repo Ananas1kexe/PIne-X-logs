@@ -39,6 +39,13 @@ class setting(commands.Cog):
         
     @commands.slash_command(name='set-role', description='Установить роль для упоминания')
     async def set_role(self, inter: disnake.AppCommandInter, role: disnake.Role):
+        if role.id == inter.guild.default_role.id:
+            embed = disnake.Embed(
+                description="Невозможно установить роль @everyone для упоминания.",
+                color=disnake.Color.red()
+            )
+            await inter.response.send_message(embed=embed, ephemeral=True)
+            return
         async with aiosqlite.connect('main.db') as db:
             async with db.execute("SELECT channel FROM channel_log WHERE server_id = ?", (inter.guild.id,)) as cursor:
                 row = await cursor.fetchone()
